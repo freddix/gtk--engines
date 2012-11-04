@@ -1,0 +1,126 @@
+From 1e2d503ea6c1dbbf04fc0d7773338bd3f847257b Mon Sep 17 00:00:00 2001
+From: Benjamin Berg <benjamin@sipsolutions.net>
+Date: Sat, 18 Feb 2012 15:42:47 +0000
+Subject: Explicitly link against libm.
+
+---
+diff --git a/configure.ac b/configure.ac
+index 3cc89e0..8570250 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -124,6 +124,9 @@ AC_SUBST(GTK_LIBS)
+ GTK_VERSION=`$PKG_CONFIG --variable=gtk_binary_version gtk+-2.0`
+ AC_SUBST(GTK_VERSION)
+ 
++AC_CHECK_LIBM
++AC_SUBST(LIBM)
++
+ AC_SUBST(BUILD_ENGINES)
+ AC_SUBST(BUILD_THEMES)
+ AC_SUBST(BUILD_SCHEMAS)
+diff --git a/engines/clearlooks/Makefile.am b/engines/clearlooks/Makefile.am
+index 07c46fb..f1cda09 100644
+--- a/engines/clearlooks/Makefile.am
++++ b/engines/clearlooks/Makefile.am
+@@ -43,7 +43,7 @@ libclearlooks_la_SOURCES =		\
+ 	./src/clearlooks_types.h
+ 
+ libclearlooks_la_LDFLAGS = -module -avoid-version -no-undefined -export-symbols $(top_srcdir)/engines/engine.symbols
+-libclearlooks_la_LIBADD =  $(top_builddir)/engines/support/libsupport.la $(GTK_LIBS)
++libclearlooks_la_LIBADD =  $(top_builddir)/engines/support/libsupport.la $(GTK_LIBS) $(LIBM)
+ 
+ 
+ -include $(top_srcdir)/git.mk
+diff --git a/engines/crux/Makefile.am b/engines/crux/Makefile.am
+index 6a23ced..888e99f 100644
+--- a/engines/crux/Makefile.am
++++ b/engines/crux/Makefile.am
+@@ -19,7 +19,7 @@ libcrux_engine_la_SOURCES = \
+ 	./src/crux-rc-style.h
+ 
+ libcrux_engine_la_LDFLAGS = -module -avoid-version -no-undefined -export-symbols $(top_srcdir)/engines/engine.symbols
+-libcrux_engine_la_LIBADD = $(top_builddir)/engines/support/libsupport.la $(GTK_LIBS)
++libcrux_engine_la_LIBADD = $(top_builddir)/engines/support/libsupport.la $(GTK_LIBS) $(LIBM)
+ 
+ -include $(top_srcdir)/git.mk
+ 
+diff --git a/engines/glide/Makefile.am b/engines/glide/Makefile.am
+index 3255c8e..defe538 100644
+--- a/engines/glide/Makefile.am
++++ b/engines/glide/Makefile.am
+@@ -34,7 +34,7 @@ libglide_la_SOURCES = \
+ 	./src/glide_gtk2_engine.h
+ 
+ libglide_la_LDFLAGS = -module -avoid-version -no-undefined -export-symbols $(top_srcdir)/engines/engine.symbols
+-libglide_la_LIBADD =  $(top_builddir)/engines/support/libsupport.la $(GTK_LIBS)
++libglide_la_LIBADD =  $(top_builddir)/engines/support/libsupport.la $(GTK_LIBS) $(LIBM)
+ 
+ -include $(top_srcdir)/git.mk
+ 
+diff --git a/engines/hc/Makefile.am b/engines/hc/Makefile.am
+index 61528e3..0eb240e 100644
+--- a/engines/hc/Makefile.am
++++ b/engines/hc/Makefile.am
+@@ -38,7 +38,7 @@ libhcengine_la_SOURCES = \
+ 	./src/hc-style.c
+ 
+ libhcengine_la_LDFLAGS = -module -avoid-version -no-undefined -export-symbols $(top_srcdir)/engines/engine.symbols
+-libhcengine_la_LIBADD = $(top_builddir)/engines/support/libsupport.la $(GTK_LIBS)
++libhcengine_la_LIBADD = $(top_builddir)/engines/support/libsupport.la $(GTK_LIBS) $(LIBM)
+ 
+ -include $(top_srcdir)/git.mk
+ 
+diff --git a/engines/industrial/Makefile.am b/engines/industrial/Makefile.am
+index 5cbe990..73cac95 100644
+--- a/engines/industrial/Makefile.am
++++ b/engines/industrial/Makefile.am
+@@ -39,7 +39,7 @@ EXTRA_DIST = \
+ 	./AUTHORS
+ 
+ libindustrial_la_LDFLAGS = -module -avoid-version -no-undefined -export-symbols $(top_srcdir)/engines/engine.symbols
+-libindustrial_la_LIBADD = $(top_builddir)/engines/support/libsupport.la $(GTK_LIBS)
++libindustrial_la_LIBADD = $(top_builddir)/engines/support/libsupport.la $(GTK_LIBS) $(LIBM)
+ 
+ -include $(top_srcdir)/git.mk
+ 
+diff --git a/engines/mist/Makefile.am b/engines/mist/Makefile.am
+index 439f6d2..b2bc2f7 100644
+--- a/engines/mist/Makefile.am
++++ b/engines/mist/Makefile.am
+@@ -16,7 +16,7 @@ libmist_la_SOURCES = \
+ 	./src/mist.c
+ 
+ libmist_la_LDFLAGS = -module -avoid-version -no-undefined -export-symbols $(top_srcdir)/engines/engine.symbols
+-libmist_la_LIBADD = $(top_builddir)/engines/support/libsupport.la $(GTK_LIBS)
++libmist_la_LIBADD = $(top_builddir)/engines/support/libsupport.la $(GTK_LIBS) $(LIBM)
+ 
+ -include $(top_srcdir)/git.mk
+ 
+diff --git a/engines/redmond/Makefile.am b/engines/redmond/Makefile.am
+index a9a58d4..52986b2 100644
+--- a/engines/redmond/Makefile.am
++++ b/engines/redmond/Makefile.am
+@@ -37,7 +37,7 @@ libredmond95_la_SOURCES = \
+ 	./src/redmond_gtk2_engine.h
+ 
+ libredmond95_la_LDFLAGS = -module -avoid-version -no-undefined -export-symbols $(top_srcdir)/engines/engine.symbols
+-libredmond95_la_LIBADD =  $(top_builddir)/engines/support/libsupport.la $(GTK_LIBS)
++libredmond95_la_LIBADD =  $(top_builddir)/engines/support/libsupport.la $(GTK_LIBS) $(LIBM)
+ 
+ -include $(top_srcdir)/git.mk
+ 
+diff --git a/engines/thinice/Makefile.am b/engines/thinice/Makefile.am
+index 57a3797..a90c9c6 100644
+--- a/engines/thinice/Makefile.am
++++ b/engines/thinice/Makefile.am
+@@ -18,7 +18,7 @@ libthinice_la_SOURCES = \
+ 	./src/thinice_main.c
+ 
+ libthinice_la_LDFLAGS = -module -avoid-version -no-undefined -export-symbols $(top_srcdir)/engines/engine.symbols
+-libthinice_la_LIBADD = $(top_builddir)/engines/support/libsupport.la $(GTK_LIBS)
++libthinice_la_LIBADD = $(top_builddir)/engines/support/libsupport.la $(GTK_LIBS) $(LIBM)
+ 
+ -include $(top_srcdir)/git.mk
+ 
+--
+cgit v0.9.0.2

@@ -1,0 +1,25 @@
+From a0cc71e7f62f355502045747cda973e674d3103b Mon Sep 17 00:00:00 2001
+From: Benjamin Berg <benjamin@sipsolutions.net>
+Date: Sun, 18 Sep 2011 14:20:45 +0000
+Subject: Recreate the cr instead of using cairo_reset_clip. (fixes #613911)
+
+It seems like an already active clip is removed if we run cairo_reset_clip,
+which means that we might draw on top of other things.
+---
+diff --git a/engines/clearlooks/src/clearlooks_style.c b/engines/clearlooks/src/clearlooks_style.c
+index 6820c90..f2fb838 100644
+--- a/engines/clearlooks/src/clearlooks_style.c
++++ b/engines/clearlooks/src/clearlooks_style.c
+@@ -881,7 +881,9 @@ clearlooks_style_draw_box (DRAW_ARGS)
+ 				}
+ 			}
+ 
+-			cairo_reset_clip (cr);
++			/* Recreate the cr without the "area" clip. */
++			cairo_destroy (cr);
++			cr = ge_gdk_drawable_to_cairo (window, NULL);
+ 			gdk_cairo_rectangle (cr, &tmp);
+ 			cairo_clip (cr);
+ 		}
+--
+cgit v0.9.0.2
